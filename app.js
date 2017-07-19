@@ -2,22 +2,42 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+let buzzArr = [];
+let score = 0;
+
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-  app.render('index');
+
+app.get('/buzzwords', (req, res) => {
+  let buzzJson = JSON.stringify(buzzArr);
+  res.send(`buzzwords: ${buzzJson}\n`);
 });
 
+app.post('/buzzword', (req, res) =>{
+  let matches = req.body.buzzword.match(/\d+/g);
+  if (isNaN(req.body.points) || matches != null){
+    res.json({'success': false});
+  }else{
+    let num = parseInt(req.body.points);
+    req.body.points = num;
+    buzzArr.push(req.body);
+    res.json({'success' : true});
+  }
+});
 
-app.post('/:buzzword/:points', (req, res, next) =>{
-  console.log(req.body);
-  next();
+app.post('/reset', (req, res) => {
+  if (req.body.reset === 'true'){
+   buzzArr = [];
+   score = 0;
+   res.json({'success': true});
+ }else{
+  res.json({'success' : false});
+}
 });
 
 app.listen(4958, () => {
-  process.stdout.write('listening on port 4958');
+  process.stdout.write('listening on port 4958\n');
 });
