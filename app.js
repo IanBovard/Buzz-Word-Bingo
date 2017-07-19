@@ -9,7 +9,6 @@ let buzzArr = [];
 let score = 0;
 app.use(express.static('public'));
 
-
 app.get('/buzzwords', (req, res) => {
   let buzzwords = buzzArr.map( (obj) => {
     return obj.buzzword;
@@ -40,6 +39,32 @@ app.post('/reset', (req, res) => {
 }
 });
 
+app.put('/buzzword',  (req, res) => {
+  let wordPut = buzzArr.reduce( (obj) => {
+    if (req.body.buzzword === obj);
+    return obj;
+  });
+  if (wordPut === req.body.buzzword){
+    wordPut.heard = true;
+    score += wordCheck.points;
+    res.json({'success' : true, 'newScore' : score});
+  }else{
+    res.json({'success' : false});
+  }
+});
+
+app.delete('/buzzword', (req,res) => {
+  let wordDelete = buzzArr.map( (obj) => {
+    return obj.buzzword;
+  });
+  let wordIndex = wordDelete.indexOf(req.body.buzzword);
+  if (wordIndex > -1){
+    buzzArr.splice(wordIndex, 1);
+    res.json({'success' : true});
+  }else{
+    res.json({'success' : false});
+  }
+});
 app.listen(4958, () => {
   process.stdout.write('listening on port 4958\n');
 });
