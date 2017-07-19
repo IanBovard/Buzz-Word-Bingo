@@ -7,13 +7,15 @@ app.use(bodyParser.json());
 
 let buzzArr = [];
 let score = 0;
-
 app.use(express.static('public'));
 
 
 app.get('/buzzwords', (req, res) => {
-  let buzzJson = JSON.stringify(buzzArr);
-  res.send(`buzzwords: ${buzzJson}\n`);
+  let buzzwords = buzzArr.map( (obj) => {
+    return obj.buzzword;
+  });
+  let buzzObj = {buzzwords};
+  res.send(buzzObj);
 });
 
 app.post('/buzzword', (req, res) =>{
