@@ -5,9 +5,14 @@ const handles = function () {
     postHandle : postHandle,
     postReset : postReset,
     putHandle : putHandle,
-    deleteHandle : deleteHandle
+    deleteHandle : deleteHandle,
+
   };
 };
+
+let buzzArr = [];
+let score = 0;
+
 function getHandle (req, res){
   let buzzwords = buzzArr.map( (obj) => {
     return obj.buzzword;
@@ -27,6 +32,7 @@ function postHandle (req, res){
     res.json({'success' : true});
   }
 }
+
 
 function postReset (req, res){
   if (req.body.reset === 'true'){
