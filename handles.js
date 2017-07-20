@@ -1,15 +1,13 @@
 /* jshint esversion:6*/
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
-const handles = require('./handles.js');
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-let buzzArr = [];
-let score = 0;
-app.use(express.static('public'));
-
+const handles = function () {
+  return {
+    getHandle : getHandle,
+    postHandle : postHandle,
+    postReset : postReset,
+    putHandle : putHandle,
+    deleteHandle : deleteHandle
+  };
+};
 function getHandle (req, res){
   let buzzwords = buzzArr.map( (obj) => {
     return obj.buzzword;
@@ -66,13 +64,4 @@ function deleteHandle (req, res) {
     res.json({'success' : false});
   }
 }
-
-app.get('/buzzwords', getHandle);
-app.post('/buzzword',postHandle);
-app.post('/reset', postReset);
-app.put('/buzzword',  putHandle);
-app.delete('/buzzword', deleteHandle);
-
-app.listen(4958, () => {
-  process.stdout.write('listening on port 4958\n');
-});
+module.exports = new handles();
